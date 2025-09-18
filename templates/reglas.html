@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+
+{% block title %}Reglas Regex{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+  <div class="row">
+    <!-- Columna izquierda: Guía de Expresiones Regulares -->
+    <div class="col-md-4">
+      <div class="p-4 border rounded shadow-sm h-100" style="border-color: var(--color-secundario);">
+        <h2 style="color: var(--texto);">Guía de Expresiones Regulares</h2>
+        <ul class="list-unstyled">
+          <li class="mb-2"><code style="color: var(--texto-code);">.</code> → Cualquier carácter</li>
+          <li class="mb-2"><code style="color: var(--texto-code);">\d</code> → Dígito</li>
+          <li class="mb-2"><code style="color: var(--texto-code);">\w</code> → Caracter alfanumérico</li>
+          <li class="mb-2"><code style="color: var(--texto-code);">+</code> → Una o más veces</li>
+          <li class="mb-2"><code style="color: var(--texto-code);">*</code> → Cero o más veces</li>
+          <li class="mb-2"><code style="color: var(--texto-code);">?</code> → Cero o una vez</li>
+        </ul>
+        <!-- Botón modal construcción regex -->
+        <button type="button" class="btn btn-custom mt-3" data-bs-toggle="modal" data-bs-target="#regexGuideModal">
+          Cómo construir mi regex
+        </button>
+      </div>
+    </div>
+
+    <!-- Columna derecha: Contenido principal -->
+    <div class="col-md-8">
+      <div class="container-fluid p-5 text-center mb-4" style="background-color: var(--color-principal); color: var(--texto);">
+        <h1>¿Qué puedes hacer?</h1>
+        <p>Opciones y funciones del programa.</p>
+        <!-- Botón para abrir el modal de funciones -->
+        <button type="button" class="btn btn-light mt-3" data-bs-toggle="modal" data-bs-target="#infoModal">
+          Ver detalles de funciones
+        </button>
+      </div>
+
+      <!-- Botón Volver -->
+      <div class="text-center mt-4">
+        <a href="{{ url_for('routes.index') }}" class="btn btn-secondary">Volver</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal con la información del programa -->
+<div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content" style="color: #212529;"> <!-- Fijamos color oscuro -->
+      <div class="modal-header" style="background-color: var(--color-principal);">
+        <h5 class="modal-title" id="infoModalLabel">Funciones del Programa</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <!-- Columna 1 -->
+          <div class="col-md-4 mb-3">
+            <div class="p-4 border rounded shadow-sm h-100" style="border-color: var(--color-secundario);">
+              <h3>Ingresar Regex</h3>
+              <p>El programa permite ingresar una <span class="fw-bold">expresión regular</span> personalizada.</p>
+              <p>Si la expresión es inválida, se mostrará un mensaje de error.</p>
+            </div>
+          </div>
+
+          <!-- Columna 2 -->
+          <div class="col-md-4 mb-3">
+            <div class="p-4 border rounded shadow-sm h-100" style="border-color: var(--color-secundario);">
+              <h3>Ingresar Texto</h3>
+              <p>Se debe escribir un bloque de texto de al menos <span class="fw-bold">5 líneas</span>.</p>
+              <p>Este texto será el que se analizará con la expresión regular.</p>
+            </div>
+          </div>
+
+          <!-- Columna 3 -->
+          <div class="col-md-4 mb-3">
+            <div class="p-4 border rounded shadow-sm h-100" style="border-color: var(--color-secundario);">
+              <h3>Procesar y Resaltar</h3>
+              <p>El programa aplicará la expresión regular al texto ingresado.</p>
+              <p>El resultado mostrará el <span class="fw-bold">texto original</span> con las coincidencias resaltadas.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-custom" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal construcción regex en columnas -->
+<div class="modal fade" id="regexGuideModal" tabindex="-1" aria-labelledby="regexGuideLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content" style="color: #212529;"> <!-- Fijamos color oscuro -->
+      <div class="modal-header" style="background-color: var(--color-principal);">
+        <h5 class="modal-title" id="regexGuideLabel">Cómo construir tu expresión regular</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <!-- Columna 1 -->
+          <div class="col-md-6 mb-3">
+            <div class="p-3 border rounded shadow-sm h-100" style="border-color: var(--color-secundario);">
+              <h6>Conceptos básicos</h6>
+              <ul>
+                <li>^inicio → Coincide con el inicio de la línea</li>
+                <li>fin$ → Coincide con el final de la línea</li>
+                <li>[abc] → Coincide con cualquiera de los caracteres a,b,c</li>
+                <li>[^abc] → Coincide con cualquier carácter excepto a,b,c</li>
+                <li>{n} → Exactamente n repeticiones</li>
+                <li>{n,m} → Entre n y m repeticiones</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Columna 2 -->
+          <div class="col-md-6 mb-3">
+            <div class="p-3 border rounded shadow-sm h-100" style="border-color: var(--color-secundario);">
+              <h6>Avanzado</h6>
+              <ul>
+                <li>(...) → Grupo de captura</li>
+                <li>| → Alternancia (OR)</li>
+                <li>\s → Espacio en blanco</li>
+                <li>\S → No espacio</li>
+                <li>\b → Límite de palabra</li>
+                <li>\B → No límite de palabra</li>
+                <li>(?P<name>…) → Grupo con nombre</li>
+                <li>(?=…) → Lookahead positivo</li>
+                <li>(?!…) → Lookahead negativo</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-custom" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

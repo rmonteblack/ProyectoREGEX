@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Inicio - Regex Tester{% endblock %}
+
+{% block content %}
+<div class="text-center">
+    <h1 class="mb-4 highlight">Bienvenido al Regex Tester</h1>
+    <p class="lead">Aquí podrás <span class="highlight">probar</span> y <span class="highlight">validar</span> tus expresiones regulares en tiempo real.</p>
+
+    <div class="mt-4">
+        <a href="{{ url_for('routes.reglas') }}" class="btn btn-custom btn-lg me-2">Ver Reglas</a>
+        <a href="{{ url_for('routes.probar') }}" class="btn btn-custom btn-lg me-2">Probar Regex</a>
+    </div>
+</div>
+{% endblock %}

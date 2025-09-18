@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block title %}Probar - Regex Tester{% endblock %}
+
+{% block content %}
+<div class="text-center">
+    <h1 class="mb-4 highlight">Bienvenido al Regex Tester</h1>
+    <p class="lead">Ingrese su expresión regex y un texto para analizar</p>
+</div>
+
+<div class="container mt-5">
+  <form id="regexForm" method="POST">
+    <div class="row mb-4">
+      <!-- Campo Regex -->
+      <div class="col-md-6 mb-3">
+        <label for="regex" class="form-label fw-bold">Expresión Regex</label>
+        <input type="text" id="regex" name="regex" class="form-control border-2"
+               placeholder="Ejemplo: \berror\b"
+               style="border-color: var(--color-principal);"
+               required value="{% if regex_value %}{{ regex_value|e }}{% endif %}">
+      </div>
+
+      <!-- Campo Texto -->
+      <div class="col-md-6 mb-3">
+        <label for="editableDiv" class="form-label fw-bold">Texto a analizar</label>
+        <div id="editableDiv" contenteditable="true"
+             class="form-control border-2"
+             style="border-color: var(--color-principal); height:220px; overflow:auto; white-space:pre-wrap;">
+             {% if texto_value %}{{ texto_value|e }}{% endif %}
+        </div>
+        <input type="hidden" name="texto" id="hiddenTexto" value="{% if texto_value %}{{ texto_value|e }}{% endif %}">
+
+        {% if resultado %}
+        <p class="mt-2" style="font-weight:bold;">
+            Coincidencias: {{ conteo }}
+            {% if coincidencias_list %}
+                <br>Extraído: {{ coincidencias_list|join(", ") }}
+            {% endif %}
+        </p>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="text-center">
+      <button type="submit" class="btn btn-lg text-white" style="background-color: var(--color-principal); border:none;">
+        Procesar
+      </button>
+    </div>
+  </form>
+</div>
+
+<script>
+document.getElementById("regexForm").addEventListener("submit", function(){
+    document.getElementById("hiddenTexto").value = document.getElementById("editableDiv").innerText;
+});
+
+{% if resultado %}
+document.getElementById("editableDiv").innerHTML = {{ resultado | tojson }};
+{% endif %}
+</script>
+
+<!-- Modal de Errores -->
+<div class="modal fade" id="errorModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color:#dc3545; color:white;">
+        <h5 class="modal-title">⚠️ Error</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body" id="errorMessage"></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        var modal = new bootstrap.Modal(document.getElementById("errorModal"));
+        var body = document.getElementById("errorMessage");
+        body.innerHTML = "";
+        {% for category, message in messages %}
+          body.innerHTML += "<p>{{ message }}</p>";
+        {% endfor %}
+        modal.show();
+      });
+    </script>
+  {% endif %}
+{% endwith %}
+{% endblock %}

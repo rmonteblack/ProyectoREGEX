@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{% block title %}Regex Tester{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        :root {
+            /* Tema claro */
+            --color-principal-claro: #8A2BE2;
+            --color-secundario-claro: #4B0082;
+            --texto-claro: #111;
+            --fondo-claro: #f8f9fa;
+
+            /* Tema oscuro */
+            --color-principal-oscuro: #5C5470;
+            --color-secundario-oscuro: #2A2A40;
+            --texto-oscuro: #eee;
+            --fondo-oscuro: #1c1c2b;
+
+            /* Tema accesible - Alto contraste */
+            --color-principal-accesible: #000000; /* Fondo negro */
+            --color-secundario-accesible: #FFCC00; /* Amarillo más suave pero con buen contraste */
+            --texto-accesible: #FFFFFF; /* Texto blanco para mejor contraste */
+            --fondo-accesible: #000000;
+            --borde-accesible: #FFCC00; /* Bordes amarillos para elementos interactivos */
+
+            /* Tamaños de fuente accesibles */
+            --font-size-normal: 1rem;
+            --font-size-large: 1.25rem;
+            --font-size-xlarge: 1.5rem;
+        }
+
+        body[data-theme="claro"] {
+            --color-principal: var(--color-principal-claro);
+            --color-secundario: var(--color-secundario-claro);
+            --texto: var(--texto-claro);
+            --fondo: var(--fondo-claro);
+            --borde: var(--color-principal-claro);
+            background-color: var(--fondo);
+            color: var(--texto);
+            font-size: var(--font-size-normal);
+        }
+
+        body[data-theme="oscuro"] {
+            --color-principal: var(--color-principal-oscuro);
+            --color-secundario: var(--color-secundario-oscuro);
+            --texto: var(--texto-oscuro);
+            --fondo: var(--fondo-oscuro);
+            --borde: var(--color-principal-oscuro);
+            background-color: var(--fondo);
+            color: var(--texto);
+            font-size: var(--font-size-normal);
+        }
+
+        body[data-theme="accesible"] {
+            --color-principal: var(--color-principal-accesible);
+            --color-secundario: var(--color-secundario-accesible);
+            --texto: var(--texto-accesible);
+            --fondo: var(--fondo-accesible);
+            --borde: var(--borde-accesible);
+            background-color: var(--fondo);
+            color: var(--texto);
+            font-size: var(--font-size-large);
+
+            /* Mejorar legibilidad con fuentes sans-serif */
+            font-family: Arial, Helvetica, sans-serif;
+
+            /* Asegurar que todos los textos tengan buen contraste */
+            --bs-body-color: var(--texto);
+            --bs-body-bg: var(--fondo);
+        }
+
+        /* Modo texto grande para mayor accesibilidad */
+        body[data-textsize="large"] {
+            font-size: var(--font-size-large);
+        }
+
+        body[data-theme="accesible"][data-textsize="large"] {
+            font-size: var(--font-size-xlarge);
+        }
+
+        .navbar-custom {
+            background-color: var(--color-principal);
+        }
+
+        footer {
+            background-color: var(--color-principal);
+            color: var(--texto) !important;
+        }
+
+        .btn-custom {
+            background-color: var(--color-principal);
+            border: 2px solid var(--borde);
+            color: var(--texto);
+        }
+
+        .btn-custom:hover {
+            background-color: var(--color-secundario);
+            border-color: var(--texto);
+        }
+
+        .highlight {
+            color: var(--color-secundario);
+            font-weight: bold;
+        }
+
+        input, textarea, .form-control {
+            color: var(--texto);
+            background-color: var(--fondo);
+            border: 2px solid var(--borde);
+        }
+
+        /* Mejorar focus para accesibilidad */
+        .btn:focus,
+        .form-control:focus,
+        .dropdown-toggle:focus {
+            outline: 3px solid var(--borde);
+            outline-offset: 2px;
+        }
+
+        /* Estilos específicos para modo accesible */
+        body[data-theme="accesible"] .btn,
+        body[data-theme="accesible"] .form-control,
+        body[data-theme="accesible"] .card {
+            border-width: 2px;
+            border-color: var(--borde);
+        }
+
+        body[data-theme="accesible"] a {
+            color: var(--color-secundario);
+            text-decoration: underline;
+        }
+
+        body[data-theme="accesible"] .dropdown-menu {
+            background-color: var(--fondo);
+            border: 2px solid var(--borde);
+        }
+
+        body[data-theme="accesible"] .dropdown-item {
+            color: var(--texto);
+        }
+
+        body[data-theme="accesible"] .dropdown-item:hover {
+            background-color: var(--color-secundario);
+            color: var(--color-principal);
+        }
+
+        /* Controles de accesibilidad */
+        .accessibility-controls {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            background-color: var(--color-principal);
+            padding: 10px;
+            border-radius: 5px;
+            border: 2px solid var(--borde);
+        }
+
+        .accessibility-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 5px;
+            cursor: pointer;
+            background-color: var(--color-secundario);
+            color: var(--color-principal);
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body data-theme="claro" data-textsize="normal">
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-custom">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="{{ url_for('routes.index') }}">Regex Tester</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('routes.index') }}">Inicio</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('routes.reglas') }}">Reglas</a></li>
+
+                <!-- Dropdown de modos -->
+                <li class="nav-item dropdown">
+                    <button class="btn btn-custom dropdown-toggle ms-3" id="modeDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        Modo
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="modeDropdown">
+                        <li><a class="dropdown-item" href="#" onclick="setTheme('claro')">🌞 Claro</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="setTheme('oscuro')">🌙 Oscuro</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="setTheme('accesible')">♿ Accesible</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- CONTENIDO -->
+<main class="container py-4">
+    {% block content %}{% endblock %}
+</main>
+
+<!-- FOOTER -->
+<footer class="text-center py-3 mt-4">
+    <small>&copy; 2025 Proyecto Regex con Flask</small>
+</footer>
+
+<!-- Controles de accesibilidad -->
+<div class="accessibility-controls" id="accessibilityControls">
+    <div class="d-flex flex-column">
+        <button class="accessibility-btn" onclick="toggleTextSize()" title="Tamaño de texto">
+            A<span class="smaller">+</span>
+        </button>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    function setTheme(theme) {
+        document.body.dataset.theme = theme;
+        localStorage.setItem('theme', theme);
+
+        // Mostrar controles de accesibilidad solo en modo accesible
+        if (theme === 'accesible') {
+            document.getElementById('accessibilityControls').style.display = 'block';
+        } else {
+            document.getElementById('accessibilityControls').style.display = 'none';
+            // Restablecer tamaño de texto al cambiar de tema
+            document.body.dataset.textsize = 'normal';
+        }
+    }
+
+    function toggleTextSize() {
+        const currentSize = document.body.dataset.textsize || 'normal';
+        document.body.dataset.textsize = currentSize === 'normal' ? 'large' : 'normal';
+        localStorage.setItem('textsize', document.body.dataset.textsize);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const savedTheme = localStorage.getItem('theme') || 'claro';
+        const savedTextSize = localStorage.getItem('textsize') || 'normal';
+
+        document.body.dataset.theme = savedTheme;
+        document.body.dataset.textsize = savedTextSize;
+
+        // Mostrar controles de accesibilidad si está en modo accesible
+        if (savedTheme === 'accesible') {
+            document.getElementById('accessibilityControls').style.display = 'block';
+        } else {
+            document.getElementById('accessibilityControls').style.display = 'none';
+        }
+    });
+</script>
+</body>
+</html>
