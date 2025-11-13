@@ -50,16 +50,15 @@ def probar():
         coincidencias_list = patron.findall(texto_value)
         conteo = len(coincidencias_list)
 
-        # Construir 'resultado' de forma segura:
-        # escapamos todas las porciones no coincidentes y reemplazamos
-        # cada coincidencia por <mark>escaped(match)</mark>
+
+
         parts = []
         last = 0
         for m in patron.finditer(texto_value):
             s, e = m.span()
             # texto entre last y s (escapado)
             parts.append(html.escape(texto_value[last:s]))
-            # match escapado dentro de mark
+
             parts.append(f'<mark style="background-color:#FFD700; color:#000;">{html.escape(m.group(0))}</mark>')
             last = e
         parts.append(html.escape(texto_value[last:]))
